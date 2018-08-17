@@ -55,7 +55,10 @@ ROOT_URLCONF = 'auth_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'auth_app/templates/auth_app'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
