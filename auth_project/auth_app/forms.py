@@ -25,7 +25,7 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         )
     
-class ConnexionForm(forms.Form):
+class LoginForm(forms.Form):
     username = forms.CharField(
         label='Identifiant',
         max_length=50,
