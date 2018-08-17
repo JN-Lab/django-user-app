@@ -1,1 +1,4 @@
 env
+auth_project/auth_project/__pycache__/
+auth_project/auth_app/__pycache__/
+auth_project/auth_app/migrations/__pycache__/
