@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="description" content="{% block meta_description %}Auth Template{% endblock %}">
+  <title>{% block title %}Titre de la page{% endblock %}</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+
+  <!-- Custom Fonts -->
+  <!-- Custom CSS -->
+
+</head>
+<body>
+<main>
+    {% block content %}{% endblock %}
+</main>
+<!-- Bootstrap core Javascript-->
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+</body>
+</html>
