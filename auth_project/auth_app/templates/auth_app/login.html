@@ -4,7 +4,7 @@
 {% block content %}
 {% load static %}
     <main class="container main-container">
-        <div class="row card text-white bg-dark mb-3">
+        <section class="row card text-white bg-dark mb-3">
             <div class="card-header">
                 LogIn
             </div>
@@ -24,12 +24,12 @@
                         {{ login_form.password.label }}
                         {{ login_form.password }}
                     </div>
-                    <button type="submit" class="btn-submit-user btn btn-block btn-primary">Connexion</button>                 
+                    <button type="submit" class="btn btn-block btn-primary">Connexion</button>                 
                 </form>
                 <div>
-                    <a href="">Créer un compte</a>
+                    <a href="{% url 'register' %}">Créer un compte</a>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 {% endblock %}

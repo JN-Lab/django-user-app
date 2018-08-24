@@ -5,3 +5,7 @@ from .forms import LoginForm, RegisterForm
 def login(request):
     login_form = LoginForm()
     return render(request, 'login.html', locals())
+
+def register(request):
+    register_form = RegisterForm()
+    return render(request, 'register.html', locals())

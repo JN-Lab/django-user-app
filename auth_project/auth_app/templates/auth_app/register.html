@@ -1,0 +1,42 @@
+{% extends "auth_app/base.html" %}
+{% block meta_description %}This is the page to register{% endblock %}
+{% block title %}Application Name - Register{% endblock %}
+{% block content %}
+{% load static %}
+    <main class="container main-container">
+        <section class="row card text-white bg-dark mb-3">
+            <div class="card-header">
+                Registration
+            </div>
+            <div class="card-body">
+                <form class="" action="" method="post">
+                    {% csrf_token %}
+                    {% if error %}
+                        {% if user_exist %}
+                        <div class="alert alert-danger">
+                            L'identifiant existe déjà. Veuillez en choisir un autre.
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="form-group">
+                        {{ register_form.username.label }}
+                        {{ register_form.username }}
+                    </div>
+                    <div class="form-group">
+                        {{ register_form.mail.label }}
+                        {{ register_form.mail }}
+                    </div>
+                    <div class="form-group">
+                        {{ register_form.password.label }}
+                        {{ register_form.password }}
+                    </div>
+                    <div class="form-group">
+                        {{ register_form.password_check.label }}
+                        {{ register_form.password_check }}
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">S'inscrire</button>
+                </form>
+            </div>
+        </section>
+    </main>
+{% endblock %}
