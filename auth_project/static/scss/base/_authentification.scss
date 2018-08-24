@@ -11,3 +11,7 @@ body {
     height: 100%;
     @include flex-box(column, center, center);
 }
+
+.test {
+    background-color: red;
+}
