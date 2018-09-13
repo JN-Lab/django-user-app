@@ -21,5 +21,6 @@ from auth_app import views as auth_views
 urlpatterns = [
     path('login/', auth_views.login, name="login"),
     path('register/', auth_views.register, name="register"),
+    path('activate/<uidb64>/<token>', auth_views.activate, name="activate"),
     path('admin/', admin.site.urls),
 ]
