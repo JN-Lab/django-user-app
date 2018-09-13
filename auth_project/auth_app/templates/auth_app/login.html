@@ -4,6 +4,9 @@
 {% block content %}
 {% load static %}
     <main class="container main-container">
+        {% if messages %}
+            {% include 'messages.html' %}
+        {% endif %}
         <section class="row card text-white bg-dark mb-3">
             <div class="card-header">
                 LogIn

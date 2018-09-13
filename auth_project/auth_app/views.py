@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponse
@@ -13,9 +16,22 @@ from .models import Profile
 from .tokens import account_activation_token
 
 # Create your views here.
-def login(request):
-    login_form = LoginForm()
-    return render(request, 'login.html', locals())
+def log_in(request):
+    if request.method == "POST":
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data["username"]
+            password = login_form.cleaned_data["password"]
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect(reverse('homepage'), locals())
+            else:
+                messages.error(request, """Your username or password is uncorrect. Please try again.""")
+                return render(request, 'login.html', locals())
+    else:
+        login_form = LoginForm()
+        return render(request, 'login.html', locals())
 
 def register(request):
     """
@@ -31,7 +47,7 @@ def register(request):
 
             username_already_exist = User.objects.filter(username=username).exists()
             if not username_already_exist and password == password_check:
-                user = User.objects.createuser(username, mail, password, is_active=False)
+                user = User.objects.create_user(username, mail, password, is_active=False)
                 user_profile = Profile(user=user)
                 user_profile.save()
 
@@ -53,9 +69,15 @@ def register(request):
 
                 messages.success(request, """An email had been sent to you. Please confirm your email address
                     to finalize your registration""")
+                return redirect('log_in')
 
             else:
-                pass
+                if username_already_exist:
+                    messages.error(request, """The account already exists""")
+                else:
+                    messages.error(request, """There is an error in the password. Please try again""")
+
+                return render(request, 'register.html', locals())
     else:
         register_form = RegisterForm()
         return render(request, 'register.html', locals())
@@ -73,3 +95,11 @@ def activate(request, uidb64, token):
         return HttpResponse("""Thank you for your email confirmation. Now you can login your account.""")
     else:
         return HttpResponse("""Activation link is invalid!""")
+
+@login_required(login_url='/login/')
+def homepage(request):
+    return render(request, 'homepage_example.html', locals())
+
+def log_out(request):
+    logout(request)
+    return redirect(reverse('log_in'), locals())

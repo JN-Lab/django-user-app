@@ -19,8 +19,10 @@ from django.urls import path
 from auth_app import views as auth_views
 
 urlpatterns = [
-    path('login/', auth_views.login, name="login"),
+    path('login/', auth_views.log_in, name="log_in"),
+    path('logout/', auth_views.log_out, name="log_out"),
     path('register/', auth_views.register, name="register"),
-    path('activate/<uidb64>/<token>', auth_views.activate, name="activate"),
+    path('activate/<uidb64>/<token>/', auth_views.activate, name="activate"),
+    path('home/', auth_views.homepage, name="homepage"),
     path('admin/', admin.site.urls),
 ]

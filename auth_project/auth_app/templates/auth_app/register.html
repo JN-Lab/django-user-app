@@ -9,6 +9,9 @@
                 Registration
             </div>
             <div class="card-body">
+                {% if messages %}
+                    {% include 'messages.html' %}
+                {% endif %}
                 <form class="" action="" method="post">
                     {% csrf_token %}
                     {% if error %}

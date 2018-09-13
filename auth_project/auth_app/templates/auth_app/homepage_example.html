@@ -1,0 +1,10 @@
+{% extends "auth_app/base.html" %}
+{% block meta_description %}This is the Home_page for the example{% endblock %}
+{% block title %}HomePage{% endblock %}
+{% block content %}
+{% load static %}
+    <h1>This is the homepage</h1>
+    <a class="nav-link" href="{% url 'log_out' %}">
+        Logout
+    </a>
+{% endblock %}
