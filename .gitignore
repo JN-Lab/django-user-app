@@ -3,3 +3,4 @@ auth_project/.sass-cache
 auth_project/auth_project/__pycache__/
 auth_project/auth_app/__pycache__/
 auth_project/auth_app/migrations/__pycache__/
+auth_project/auth_app/tests/__pycache__/
