@@ -62,6 +62,7 @@ class RegisterPageTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(user), 0)
 
+    # Come back to test this three elements below:
     # Test when we register that the user created is inactive
     # Test that a mail is sent when a registration is done
     # Test that the user field is_active is True when the link is clicked

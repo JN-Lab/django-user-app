@@ -46,7 +46,8 @@ def register(request):
             password_check = register_form.cleaned_data["password_check"]
 
             username_already_exist = User.objects.filter(username=username).exists()
-            if not username_already_exist and password == password_check:
+            mail_already_exist = User.objects.filter(email=mail).exists()
+            if not username_already_exist and not mail_already_exist and password == password_check:
                 user = User.objects.create_user(username, mail, password, is_active=False)
                 user_profile = Profile(user=user)
                 user_profile.save()
@@ -73,7 +74,10 @@ def register(request):
 
             else:
                 if username_already_exist:
-                    messages.error(request, """The account already exists""")
+                    messages.error(request, """The username already exists. Please, change it.""")
+                elif mail_already_exist:
+                    messages.error(request, """The mail already exists. Please login with your existing account.""")
+                    return redirect('log_in')
                 else:
                     messages.error(request, """There is an error in the password. Please try again""")
 
