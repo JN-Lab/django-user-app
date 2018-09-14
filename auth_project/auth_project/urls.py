@@ -23,6 +23,7 @@ urlpatterns = [
     path('logout/', auth_views.log_out, name="log_out"),
     path('register/', auth_views.register, name="register"),
     path('activate/<uidb64>/<token>/', auth_views.activate, name="activate"),
+    path('password-forgotten/', auth_views.password_forgotten, name="password_forgotten"),
     path('home/', auth_views.homepage, name="homepage"),
     path('admin/', admin.site.urls),
 ]

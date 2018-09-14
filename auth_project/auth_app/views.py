@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.core.mail import EmailMessage
 
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, PasswordResetMail
 from .models import Profile
 from .tokens import account_activation_token
 
@@ -100,10 +100,36 @@ def activate(request, uidb64, token):
     else:
         return HttpResponse("""Activation link is invalid!""")
 
+def log_out(request):
+    logout(request)
+    return redirect(reverse('log_in'), locals())
+
 @login_required(login_url='/login/')
 def homepage(request):
     return render(request, 'homepage_example.html', locals())
 
-def log_out(request):
-    logout(request)
-    return redirect(reverse('log_in'), locals())
+# For password reset process
+
+def password_forgotten(request):
+    """
+    This view will:
+        - generate a form for get the mail
+        - check if there is an account linked to this mail
+        - send a mail if there is or error message if not
+    """
+    if request.method == "POST":
+        pass
+    else:
+        password_forgotten_form = PasswordResetMail()
+        return render(request, 'password_reset_mail.html', locals())
+
+def password_reset_activate(request, uidb64, token):
+    """
+    This view will:
+        - check if the token is valid
+            - ask for new password if the token is valid
+                - register the new password if ok + redirect on login page
+                - message error if there is a problem in the new password
+            - error message if not + rediect on login page
+    """
+    pass

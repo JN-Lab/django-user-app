@@ -36,3 +36,10 @@ class LoginForm(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         )
+
+class PasswordResetMail(forms.Form):
+    mail = forms.EmailField(
+        label="Email",
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+        )

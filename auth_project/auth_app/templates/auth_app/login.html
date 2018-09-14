@@ -9,16 +9,11 @@
         {% endif %}
         <section class="row card text-white bg-dark mb-3">
             <div class="card-header">
-                LogIn
+                Connexion
             </div>
             <div class="card-body">
                 <form class="" action="" method="post">
                     {% csrf_token %}
-                    {% if error %}   
-                        <div class="alert alert-danger">
-                            Identifiant ou mot de passe incorrect. Veuillez recommencer.
-                        </div>
-                    {% endif %}
                     <div class="form-group">
                         {{ login_form.username.label }}
                         {{ login_form.username }}
@@ -27,10 +22,10 @@
                         {{ login_form.password.label }}
                         {{ login_form.password }}
                     </div>
-                    <button type="submit" class="btn btn-block btn-primary">Connexion</button>                 
+                    <button type="submit" class="btn btn-block btn-primary">Se connecter</button>                 
                 </form>
                 <div class="d-flex justify-content-center mt-2">
-                    <a class="" href="">Mot de passe oublié</a>
+                    <a class="" href="{% url 'password_forgotten' %}">Mot de passe oublié</a>
                 </div>
                 <div class="d-flex justify-content-center mt-2">
                     <a class="" href="{% url 'register' %}">Créer un compte</a>
