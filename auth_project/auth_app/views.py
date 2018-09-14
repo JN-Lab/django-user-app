@@ -27,7 +27,7 @@ def log_in(request):
                 login(request, user)
                 return redirect(reverse('homepage'), locals())
             else:
-                messages.error(request, """Your username or password is uncorrect. Please try again.""")
+                messages.error(request, """Votre nom d'utilisateur ou votre mot de passe est incorrect.""")
                 return render(request, 'login.html', locals())
     else:
         login_form = LoginForm()
@@ -53,7 +53,7 @@ def register(request):
                 user_profile.save()
 
                 current_site = get_current_site(request)
-                mail_subject = "Activate your account"
+                mail_subject = "Activer votre compte"
                 message = render_to_string('acc_activate_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -68,18 +68,21 @@ def register(request):
                 )
                 email.send()
 
-                messages.success(request, """An email had been sent to you. Please confirm your email address
-                    to finalize your registration""")
+                messages.success(request, """Un email vous a été envoyé. Veuillez cliquer sur le lien pour finaliser
+                    votre inscription s'il vous plait""")
                 return redirect('log_in')
 
             else:
                 if username_already_exist:
-                    messages.error(request, """The username already exists. Please, change it.""")
+                    messages.error(request, """Ce nom d'utilisateur existe déjà. Veuillez en choisir un autre 
+                        s'il vous plaît.""")
                 elif mail_already_exist:
-                    messages.error(request, """The mail already exists. Please login with your existing account.""")
+                    messages.error(request, """L'email est déjà associé à un compte utilisateur. Veuillez vous
+                        vous connecter avec vos identifiants s'il vous plaît.""")
                     return redirect('log_in')
                 else:
-                    messages.error(request, """There is an error in the password. Please try again""")
+                    messages.error(request, """Il y a une erreur au niveau du mot de passe. Veuillez réessayer
+                        s'il vous plaît.""")
 
                 return render(request, 'register.html', locals())
     else:
@@ -96,9 +99,10 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return HttpResponse("""Thank you for your email confirmation. Now you can login your account.""")
+        return HttpResponse(""" Merci pour avoir confirmé votre email. Vous pouvez désormais 
+            vous connecter à votre compte.""")
     else:
-        return HttpResponse("""Activation link is invalid!""")
+        return HttpResponse("""Le lien d'activation n'est pas valide!""")
 
 def log_out(request):
     logout(request)
@@ -118,12 +122,41 @@ def password_forgotten(request):
         - send a mail if there is or error message if not
     """
     if request.method == "POST":
-        pass
+        password_forgotten_form = PasswordResetMail(request.POST)
+        if password_forgotten_form.is_valid():
+            mail = password_forgotten_form.cleaned_data["mail"]
+            user_already_exist = User.objects.filter(email=mail).exists()
+            if user_already_exist:
+                user = User.objects.get(email=mail)
+                current_site = get_current_site(request)
+
+                mail_subject = "Réinitialiser votre mot de passe"
+                message = render_to_string('acc_activate_reset_password.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                    'token': account_activation_token.make_token(user),
+                })
+                to_email = mail
+                email = EmailMessage(
+                    mail_subject,
+                    message,
+                    to=[to_email]
+                )
+                email.send()
+
+                messages.success(request, """Un email vous a été envoyé. Veuillez cliquer dessus sur le lien
+                    pour réinitialiser votre mot de passe""")
+                return render(request, 'password_reset_mail.html', locals())
+            else:
+                messages.error(request, "Il n'existe aucun compte associé à cet email.")
+                return render(request, 'password_reset_mail.html', locals())
+
     else:
         password_forgotten_form = PasswordResetMail()
         return render(request, 'password_reset_mail.html', locals())
 
-def password_reset_activate(request, uidb64, token):
+def reset_password(request, uidb64, token):
     """
     This view will:
         - check if the token is valid
