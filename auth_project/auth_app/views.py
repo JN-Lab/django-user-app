@@ -156,7 +156,7 @@ def password_forgotten(request):
         password_forgotten_form = PasswordResetMail()
         return render(request, 'password_reset_mail.html', locals())
 
-def password_reset(request, uidb64, token):
+def password_reset_activate(request, uidb64, token):
     """
     This view will:
         - check if the token is valid
@@ -171,7 +171,10 @@ def password_reset(request, uidb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
-        password_reset_form = PasswordResetNew()
-        return render(request, 'password_reset_new.html', locals())
+        return redirect(reverse('password_reset_new'), locals())
     else:
         return HttpResponse("""Le lien d'activation n'est pas valide!""")
+
+def password_reset_new(request):
+    password_reset_form = PasswordResetNew()
+    return render(request, 'password_reset_new.html', locals())
