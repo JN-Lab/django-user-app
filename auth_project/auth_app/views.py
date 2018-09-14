@@ -11,7 +11,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.core.mail import EmailMessage
 
-from .forms import LoginForm, RegisterForm, PasswordResetMail
+from .forms import LoginForm, RegisterForm, PasswordResetMail, PasswordResetNew
 from .models import Profile
 from .tokens import account_activation_token
 
@@ -156,7 +156,7 @@ def password_forgotten(request):
         password_forgotten_form = PasswordResetMail()
         return render(request, 'password_reset_mail.html', locals())
 
-def reset_password(request, uidb64, token):
+def password_reset(request, uidb64, token):
     """
     This view will:
         - check if the token is valid
@@ -165,4 +165,13 @@ def reset_password(request, uidb64, token):
                 - message error if there is a problem in the new password
             - error message if not + rediect on login page
     """
-    pass
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        password_reset_form = PasswordResetNew()
+        return render(request, 'password_reset_new.html', locals())
+    else:
+        return HttpResponse("""Le lien d'activation n'est pas valide!""")

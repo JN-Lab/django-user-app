@@ -43,3 +43,17 @@ class PasswordResetMail(forms.Form):
         required=True,
         widget=forms.EmailInput(attrs={'class': 'form-control'})
         )
+
+class PasswordResetNew(forms.Form):
+    password = forms.CharField(
+        label='Nouveau Mot de Passe',
+        max_length=20,
+        required=True,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        )
+    password_check = forms.CharField(
+        label='Confirmez votre nouveau Mot de Passe',
+        max_length=20,
+        required=True,
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        )
