@@ -1,21 +1,19 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib import messages
-from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.core.mail import EmailMessage
-
 from .forms import LoginForm, RegisterForm, PasswordResetMail, PasswordResetNew
 from .models import Profile
 from .tokens import account_activation_token
 
-# Create your views here.
 def log_in(request):
     """
     This view manages the connexion of the user
@@ -56,7 +54,7 @@ def register(request):
                 user_profile.save()
 
                 current_site = get_current_site(request)
-                mail_subject = "Activer votre compte"
+                mail_subject = "Activez votre compte"
                 message = render_to_string('acc_activate_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -80,7 +78,7 @@ def register(request):
                     messages.error(request, """Ce nom d'utilisateur existe déjà. Veuillez en choisir un autre 
                         s'il vous plaît.""")
                 elif mail_already_exist:
-                    messages.error(request, """L'email est déjà associé à un compte utilisateur. Veuillez vous
+                    messages.error(request, """L'email est déjà associé à un compte utilisateur. Veuillez
                         vous connecter avec vos identifiants s'il vous plaît.""")
                     return redirect('log_in')
                 else:
@@ -135,7 +133,7 @@ def password_forgotten(request):
                 user = User.objects.get(email=mail)
                 current_site = get_current_site(request)
 
-                mail_subject = "Réinitialiser votre mot de passe"
+                mail_subject = "Réinitialisez votre mot de passe"
                 message = render_to_string('acc_activate_reset_password.html', {
                     'user': user,
                     'domain': current_site.domain,

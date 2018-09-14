@@ -7,9 +7,6 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from ..models import Profile
 
-
-
-# Create your tests here.
 class RegisterPageTestCase(TestCase):
     
     @classmethod
@@ -146,3 +143,38 @@ class LogOutPageTestCase(TestCase):
         response = self.client.get(reverse('log_out'))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('log_in'))
+
+
+
+class PasswordForgottenPageTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        username = 'test-ref'
+        mail = 'test-ref@register.com'
+        password = 'ref-test-view'
+        password_check = 'ref-test-view'
+        User.objects.create_user(username, mail, password)
+    
+    def test_password_forgotten_page_get(self):
+        """
+        Just it tests if the password forgotten page is available
+        """
+        response = self.client.get(reverse('password_forgotten'))
+        self.assertEqual(response.status_code, 200)
+
+    #test page post good email
+    def test_password_forgotten_page_post_good_email(self):
+        """
+        This method tests the adequate treatment when a mail
+        linked to an existing account is posted
+        """
+        data = {
+            'mail' : 'test-ref@register.com',
+        }
+
+        response = self.client.post(reverse('password_forgotten'), data)
+
+    #test page post wrong email
+    def test_password_forgotten_page_post_wrong_email(self):
+        pass
