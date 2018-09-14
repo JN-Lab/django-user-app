@@ -3,32 +3,37 @@
 {% block title %}Application Name - Login{% endblock %}
 {% block content %}
 {% load static %}
-    <main class="container main-container">
-        {% if messages %}
-            {% include 'messages.html' %}
-        {% endif %}
-        <section class="row card text-white bg-dark mb-3">
-            <div class="card-header">
-                Connexion
-            </div>
-            <div class="card-body">
-                <form class="" action="" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ login_form.username.label }}
-                        {{ login_form.username }}
+    <main class="container h-100">
+        <section class="row h-100 align-items-center justify-content-center">     
+            <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6 bg-dark text-white rounded p-3">
+                <div class="row">
+                    <div class="col-12 border-bottom">
+                        <h2>Connexion</h2>
                     </div>
-                    <div class="form-group">
-                        {{ login_form.password.label }}
-                        {{ login_form.password }}
+                    <div class="w-100"></div>
+                    <div class="col-12 mt-3">
+                        {% if messages %}
+                            {% include 'messages.html' %}
+                        {% endif %}
+                    </div> 
+                    <form class="col-12 mt-3" action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ login_form.username.label }}
+                            {{ login_form.username }}
+                        </div>
+                        <div class="form-group">
+                            {{ login_form.password.label }}
+                            {{ login_form.password }}
+                            <a class="" href="{% url 'password_forgotten' %}">Mot de passe oublié?</a>
+                        </div>
+                        <button type="submit" class="btn btn-block btn-primary">Se connecter</button>                 
+                    </form>
+                    <div class="w-100"></div>
+                    <div class="col-12 text-center mt-5">
+                        <p>Pas encore de compte?</p>
+                        <a class="" href="{% url 'register' %}">Créer un compte</a>
                     </div>
-                    <button type="submit" class="btn btn-block btn-primary">Se connecter</button>                 
-                </form>
-                <div class="d-flex justify-content-center mt-2">
-                    <a class="" href="{% url 'password_forgotten' %}">Mot de passe oublié</a>
-                </div>
-                <div class="d-flex justify-content-center mt-2">
-                    <a class="" href="{% url 'register' %}">Créer un compte</a>
                 </div>
             </div>
         </section>

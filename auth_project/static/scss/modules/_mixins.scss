@@ -1,7 +1,0 @@
-// To create a flex box
-@mixin flex-box($direction, $main-alignment, $secondary-alignment) {
-    display: flex;
-    flex-direction: $direction;
-    justify-content: $main-alignment;
-    align-items: $secondary-alignment;
-  }

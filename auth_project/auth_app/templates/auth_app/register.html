@@ -3,42 +3,47 @@
 {% block title %}Application Name - Register{% endblock %}
 {% block content %}
 {% load static %}
-    <main class="container main-container">
-        <section class="row card text-white bg-dark mb-3">
-            <div class="card-header">
-                Création de compte
-            </div>
-            <div class="card-body">
-                {% if messages %}
-                    {% include 'messages.html' %}
-                {% endif %}
-                <form class="" action="" method="post">
-                    {% csrf_token %}
-                    {% if error %}
-                        {% if user_exist %}
-                        <div class="alert alert-danger">
-                            L'identifiant existe déjà. Veuillez en choisir un autre.
-                        </div>
+    <main class="container h-100">
+        <section class="row h-100 align-items-center justify-content-center">
+            <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6 bg-dark text-white rounded p-3">
+                <div class="row">
+                    <div class="col-12 border-bottom">
+                        <h2>Creez votre compte</h2>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12 mt-3">
+                        {% if messages %}
+                            {% include 'messages.html' %}
                         {% endif %}
-                    {% endif %}
-                    <div class="form-group">
-                        {{ register_form.username.label }}
-                        {{ register_form.username }}
                     </div>
-                    <div class="form-group">
-                        {{ register_form.mail.label }}
-                        {{ register_form.mail }}
-                    </div>
-                    <div class="form-group">
-                        {{ register_form.password.label }}
-                        {{ register_form.password }}
-                    </div>
-                    <div class="form-group">
-                        {{ register_form.password_check.label }}
-                        {{ register_form.password_check }}
-                    </div>
-                    <button type="submit" class="btn btn-block btn-primary">S'inscrire</button>
-                </form>
+                    <form class="col-12 mt-3" action="" method="post">
+                        {% csrf_token %}
+                        {% if error %}
+                            {% if user_exist %}
+                            <div class="alert alert-danger">
+                                L'identifiant existe déjà. Veuillez en choisir un autre.
+                            </div>
+                            {% endif %}
+                        {% endif %}
+                        <div class="form-group">
+                            {{ register_form.username.label }}
+                            {{ register_form.username }}
+                        </div>
+                        <div class="form-group">
+                            {{ register_form.mail.label }}
+                            {{ register_form.mail }}
+                        </div>
+                        <div class="form-group">
+                            {{ register_form.password.label }}
+                            {{ register_form.password }}
+                        </div>
+                        <div class="form-group">
+                            {{ register_form.password_check.label }}
+                            {{ register_form.password_check }}
+                        </div>
+                        <button type="submit" class="btn btn-block btn-primary">S'inscrire</button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>
