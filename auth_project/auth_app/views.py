@@ -17,6 +17,9 @@ from .tokens import account_activation_token
 
 # Create your views here.
 def log_in(request):
+    """
+    This view manages the connexion of the user
+    """
     if request.method == "POST":
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
@@ -35,7 +38,7 @@ def log_in(request):
 
 def register(request):
     """
-    This view manage the resgistration process
+    This view manages the resgistration process
     """
     if request.method == "POST":
         register_form = RegisterForm(request.POST)
@@ -90,6 +93,9 @@ def register(request):
         return render(request, 'register.html', locals())
 
 def activate(request, uidb64, token):
+    """
+    This view manages the email validation process
+    """
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
@@ -99,20 +105,19 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return HttpResponse(""" Merci pour avoir confirmé votre email. Vous pouvez désormais 
+        messages.success(request, """Merci pour avoir confirmé votre email. Vous pouvez désormais 
             vous connecter à votre compte.""")
+        return redirect(reverse('log_in'), locals())
     else:
-        return HttpResponse("""Le lien d'activation n'est pas valide!""")
+        messages.error(request, """Le lien d'activation n'est pas valide!""")
+        return redirect(reverse('register'), locals())
 
 def log_out(request):
+    """
+    This mail manages the logout process
+    """
     logout(request)
     return redirect(reverse('log_in'), locals())
-
-@login_required(login_url='/login/')
-def homepage(request):
-    return render(request, 'homepage_example.html', locals())
-
-# For password reset process
 
 def password_forgotten(request):
     """
@@ -171,10 +176,42 @@ def password_reset_activate(request, uidb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
+        login(request, user)
         return redirect(reverse('password_reset_new'), locals())
     else:
-        return HttpResponse("""Le lien d'activation n'est pas valide!""")
+        messages.error(request, """Le lien d'activation n'est pas valide!""")
+        return redirect(reverse('log_in'), locals())
 
 def password_reset_new(request):
-    password_reset_form = PasswordResetNew()
-    return render(request, 'password_reset_new.html', locals())
+    """
+    This view will change the password of the user
+    """
+
+    if request.method == "POST":
+        password_reset_form = PasswordResetNew(request.POST)
+        if password_reset_form.is_valid():
+            password = password_reset_form.cleaned_data["password"]
+            password_check = password_reset_form.cleaned_data["password_check"]
+            user = User.objects.get(username=request.user.username)
+            if user.is_authenticated and password == password_check:
+                user.set_password(password)
+                user.save()
+                logout(request)
+                messages.success(request, """Votre mot de passe a été modifié.
+                    Vous pouvez désormais vous connecter avec votre nouveau mot de passe.""")
+                return redirect(reverse('log_in'), locals())
+            else:
+                messages.error(request, """Il y a un problème concernant votre compte.
+                    Nous travaillons actuellement dessus.""")
+                return redirect(reverse('register'), locals())
+    else:
+        password_reset_form = PasswordResetNew()
+        return render(request, 'password_reset_new.html', locals())
+
+@login_required(login_url='/login/')
+def homepage(request):
+    """
+    This is just a view to have an homepage for the example.
+    Usually, this view will be out of the application in another project
+    """
+    return render(request, 'homepage_example.html', locals())
